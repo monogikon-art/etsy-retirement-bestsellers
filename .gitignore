@@ -1,0 +1,6 @@
+.vercel
+node_modules/
+.env
+.env.*
+*.local
+etsy_api_key.txt
