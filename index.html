@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Etsy Best Sellers — "Retirement Shirt"</title>
+<style>
+  :root {
+    --bg: #f4f1ec;
+    --card: #ffffff;
+    --ink: #1f1b16;
+    --muted: #7a7066;
+    --accent: #f1641e;
+    --accent-2: #2f6f4f;
+    --border: #e4ddd2;
+    --tag-bg: #f3ede4;
+    --tag-ink: #5b5247;
+    --shadow: 0 1px 3px rgba(0,0,0,.06), 0 8px 24px rgba(0,0,0,.06);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: "Segoe UI", system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.45;
+  }
+  header {
+    position: sticky; top: 0; z-index: 20;
+    background: rgba(244,241,236,.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+    padding: 18px 24px 14px;
+  }
+  .title-row { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+  h1 { font-size: 22px; margin: 0; letter-spacing: -.2px; }
+  .badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--accent); color: #fff; font-weight: 700;
+    font-size: 12px; padding: 4px 10px; border-radius: 999px;
+  }
+  .sub { color: var(--muted); font-size: 13px; margin: 4px 0 0; }
+  .controls {
+    margin-top: 12px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
+  }
+  input[type="search"], select {
+    font-size: 14px; padding: 9px 12px; border: 1px solid var(--border);
+    border-radius: 10px; background: #fff; color: var(--ink); outline: none;
+  }
+  input[type="search"] { min-width: 280px; flex: 1 1 280px; }
+  input[type="search"]:focus, select:focus { border-color: var(--accent); }
+  .count { color: var(--muted); font-size: 13px; margin-left: auto; }
+  main { padding: 22px 24px 60px; max-width: 1500px; margin: 0 auto; }
+  .grid {
+    display: grid; gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  }
+  .card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+    overflow: hidden; box-shadow: var(--shadow); display: flex; flex-direction: column;
+    transition: transform .15s ease, box-shadow .15s ease;
+  }
+  .card:hover { transform: translateY(-3px); box-shadow: 0 6px 14px rgba(0,0,0,.1), 0 18px 40px rgba(0,0,0,.1); }
+  .thumb { position: relative; aspect-ratio: 1/1; background: #efe9e0; overflow: hidden; }
+  .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .thumb .rank {
+    position: absolute; top: 10px; left: 10px;
+    background: rgba(31,27,22,.82); color: #fff; font-size: 12px; font-weight: 700;
+    padding: 3px 8px; border-radius: 8px;
+  }
+  .thumb .bs {
+    position: absolute; top: 10px; right: 10px;
+    background: var(--accent); color: #fff; font-size: 11px; font-weight: 700;
+    padding: 3px 8px; border-radius: 8px; letter-spacing: .2px;
+  }
+  .body { padding: 14px 14px 16px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+  .card h3 { font-size: 14px; margin: 0; font-weight: 600; line-height: 1.35; }
+  .card h3 a { color: var(--ink); text-decoration: none; }
+  .card h3 a:hover { color: var(--accent); }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; }
+  .tag {
+    font-size: 11.5px; background: var(--tag-bg); color: var(--tag-ink);
+    padding: 3px 8px; border-radius: 999px; cursor: pointer; border: 1px solid transparent;
+    transition: background .12s, color .12s;
+  }
+  .tag:hover { background: var(--accent); color: #fff; }
+  .tag.hit { background: var(--accent-2); color: #fff; }
+  .meta { font-size: 12px; color: var(--muted); display: flex; justify-content: space-between; align-items: center; }
+  .meta a { color: var(--accent); text-decoration: none; font-weight: 600; }
+  .meta a:hover { text-decoration: underline; }
+  .empty { text-align: center; color: var(--muted); padding: 60px 0; font-size: 15px; }
+  footer { text-align: center; color: var(--muted); font-size: 12px; padding: 0 24px 40px; }
+  .note { background: #fff7ef; border: 1px solid #f3dcc4; color: #7a5a32; font-size: 12.5px;
+          padding: 10px 14px; border-radius: 10px; margin: 14px auto 0; max-width: 1500px; }
+  mark { background: #ffe6a3; color: inherit; padding: 0 1px; border-radius: 3px; }
+</style>
+</head>
+<body>
+<header>
+  <div class="title-row">
+    <h1>Etsy Best Sellers — "Retirement Shirt"</h1>
+    <span class="badge">★ Best Seller badge</span>
+  </div>
+  <p class="sub">Search filtered with <code>is_best_seller=true</code>. Tags shown are Etsy's public related-search keyword pills per listing.</p>
+  <div class="controls">
+    <input type="search" id="q" placeholder="Search titles and tags…" autocomplete="off" />
+    <select id="sort">
+      <option value="rank">Sort: Default order</option>
+      <option value="tags-desc">Most tags first</option>
+      <option value="tags-asc">Fewest tags first</option>
+      <option value="title">Title A–Z</option>
+    </select>
+    <span class="count" id="count"></span>
+  </div>
+</header>
+<div class="note">
+  Click any <strong>tag</strong> to filter by it. These are the keyword pills Etsy displays publicly at the bottom of each listing (not the seller's private back-end tags).
+</div>
+<main>
+  <div class="grid" id="grid"></div>
+  <div class="empty" id="empty" hidden>No listings match your search.</div>
+</main>
+<footer>
+  Data captured 2026-06-22 · <span id="total"></span> Best Seller listings · for POD niche research
+</footer>
+
+<script>
+const DATA = [
+  {
+    "id": "991584276",
+    "title": "TOP GRANDAD T-shirt Cool Awesome Best Granddad Father's Day Dad Daddy Grandfather Grandpa Present Mens Funny Birthday Gift Tee Tops",
+    "url": "https://www.etsy.com/listing/991584276/top-grandad-t-shirt-cool-awesome-best",
+    "image": "https://i.etsystatic.com/23908123/r/il/ea0b8f/6641931031/il_fullxfull.6641931031_vvy7.jpg",
+    "tags": [
+      "bampa tshirt",
+      "gramps presents",
+      "cool grandads club tshirt",
+      "granddad t shirts",
+      "pops top",
+      "best granddad",
+      "grampys bestie",
+      "granfsf t shirt",
+      "dad of 4 gifts",
+      "poppy fathers day present",
+      "grandpa t shirt gift",
+      "grandad definition shirt",
+      "grandfather day gift grandfather",
+      "grumpy grandad shirt 4xl",
+      "grandpa top",
+      "granddad birthday present",
+      "dad a base xmas",
+      "gifts for grandfather to be",
+      "step dad dog shirt",
+      "grumps t shirt",
+      "gramps office",
+      "camping dad tshirt"
+    ]
+  },
+  {
+    "id": "1006735044",
+    "title": "Friends Inspired Custom \"The One Where\" T-Shirt, Mens, Womens & kids sizes, printed personalised gift, hen party, retirement, birthday Tee",
+    "url": "https://www.etsy.com/listing/1006735044/custom-the-one-where-t-shirt-friends",
+    "image": "https://i.etsystatic.com/21632162/r/il/35a446/7266710518/il_fullxfull.7266710518_pw62.jpg",
+    "tags": [
+      "custom friends shirt",
+      "friends tshirt",
+      "friends",
+      "tshirt",
+      "hen party t shirt funny",
+      "friends shirts for retirement",
+      "personalised friends tshirts",
+      "photo printed tops",
+      "friends tsh",
+      "ladies t shirt printing",
+      "printed personalised t shirts",
+      "friends birthday top",
+      "shirt customised",
+      "personalused+tshirts",
+      "personalised stag do tshirts",
+      "personalized t shirt friends",
+      "hen do tshirt photo",
+      "custom t shirt all over",
+      "personalised mens tops",
+      "tshirt covered in face",
+      "arms body legs tshirt custom",
+      "stag night tshirt",
+      "personalized stag tshirt"
+    ]
+  },
+  {
+    "id": "1021310778",
+    "title": "Retirement T-shirt, Summer Outfit, Beach Tee, It's 5 O'clock Everywhere I'm Retired Shirt, Retirement Gifts, Vacation Shirts, Funny Shirt",
+    "url": "https://www.etsy.com/listing/1021310778/retirement-t-shirt-summer-outfit-beach",
+    "image": "https://i.etsystatic.com/23783648/r/il/0a899c/3190751255/il_fullxfull.3190751255_f3xs.jpg",
+    "tags": [
+      "retired tshirt",
+      "retirement shirt",
+      "retirement",
+      "retirement gift",
+      "retirement jewelry",
+      "funny retirement shirt",
+      "tshirt",
+      "vacation shirt",
+      "retired comfort colors shirt",
+      "its 5 oclock everywhere shirt",
+      "shirt for retirement",
+      "oclock everywhere",
+      "retirement trip tshirt",
+      "retired beach bum tshirt",
+      "retirement vacation",
+      "beach retirement shirt",
+      "retired beach mode",
+      "retirement tropical shirt",
+      "retired beach teal blue",
+      "retirement long sleeve tshirt"
+    ]
+  },
+  {
+    "id": "1092427612",
+    "title": "Retirement Gift for Men or Women | Work Anniversary | Retirement Card Poster Sign | ANY YEAR",
+    "url": "https://www.etsy.com/listing/1092427612/retirement-gift-for-men-or-women-work",
+    "image": "https://i.etsystatic.com/14473070/r/il/4a66c2/7903722279/il_fullxfull.7903722279_gjbw.jpg",
+    "tags": [
+      "on this day retirement",
+      "retirement newspaper",
+      "retirement party welcome sign",
+      "retirement poster",
+      "retirement plaque",
+      "retirement sign",
+      "retirement",
+      "retirement gift for man",
+      "retirement gift man",
+      "retirement gift",
+      "retirement party",
+      "retirement gift for men",
+      "mestorydesigns",
+      "retirement gift for men printable",
+      "retirement basket male",
+      "custom retirement newspaper",
+      "retirement of telecommunications male",
+      "retirement gift poster",
+      "newspaper for retirement",
+      "2001 a legend has retired",
+      "postal retirement 1999",
+      "1981 retirement"
+    ]
+  },
+  {
+    "id": "1123201671",
+    "title": "Shady Pines Retirement Home, Shady Pines Shirt, Golden Girls Shirt, Retirement Shirt, Retirement Gift, Golden Girls Gift, Golden Girls Merch",
+    "url": "https://www.etsy.com/listing/1123201671/shady-pines-retirement-home-shady-pines",
+    "image": "https://i.etsystatic.com/19490017/r/il/022f4c/3475936660/il_fullxfull.3475936660_n19y.jpg",
+    "tags": [
+      "shady pines shirt",
+      "shady pines",
+      "golden girls tshirt",
+      "shady shirt",
+      "shady pines ma",
+      "t shirt golden girls",
+      "shady pines retirement home shirt",
+      "shady pines retirement home png",
+      "shady pines tee",
+      "shady pines tshirt",
+      "shady pines staff tshirt",
+      "shady pines t shirt",
+      "golden girls rose tshirts tshirts",
+      "golden girls retirement gifts",
+      "golden girls shirt pink",
+      "golden girls shady pines shirt",
+      "golden girls tshirt vneck",
+      "golden girls vegas shirt",
+      "golden girls retirement",
+      "shady pines ma shirt",
+      "golden girls tshirt mens",
+      "golden girls group shirts",
+      "golden girls long sleeve t"
+    ]
+  },
+  {
+    "id": "1168563831",
+    "title": "Vintage American Flag Golf Gift for Golfer Funny Golf Club T-Shirt Golf Clothing T-shirt",
+    "url": "https://www.etsy.com/listing/1168563831/vintage-american-flag-golf-gift-for",
+    "image": "https://i.etsystatic.com/18650998/r/il/c812c3/5459852071/il_fullxfull.5459852071_j7sb.jpg",
+    "tags": [
+      "golf",
+      "golf tshirt",
+      "vintage golf t shirt",
+      "mens golf tshirt",
+      "mens golf",
+      "golf shirts",
+      "golf gifts for men",
+      "golf gifts for husband",
+      "golf humour",
+      "john daly golf polos",
+      "golfer birthday gift",
+      "retired golf shirt",
+      "tee shirt golf",
+      "golf lover gift idea",
+      "mens golf funny",
+      "golf for old guys",
+      "retirement golf ball markers",
+      "unique golf gift for dad",
+      "funny golf local",
+      "golf shirts sayings",
+      "anthony kim golf",
+      "funny golf tshirts men",
+      "mens funny golf shirts xl"
+    ]
+  },
+  {
+    "id": "1183536321",
+    "title": "Retirement Gifts for Men and Women, Personalized Engraved Desk Clock, Happy Retirement Gift, Teacher Retirement Gift, Keepsake Gift",
+    "url": "https://www.etsy.com/listing/1183536321/retirement-gifts-for-men-and-women",
+    "image": "https://i.etsystatic.com/33919075/r/il/8f684b/6225742711/il_fullxfull.6225742711_hf5r.jpg",
+    "tags": [
+      "teacher retirement clock",
+      "retirement clock",
+      "retirement plaque",
+      "retirement gift",
+      "teacher retirement gifts",
+      "retirement gifts for men coworker",
+      "retirement gifts for men",
+      "personalized retirement plaque",
+      "personalized retirement gifts",
+      "mens retirement gifts",
+      "male retirement gifts",
+      "vintagegifthub retirement",
+      "gift for a retiring educator",
+      "retirement clock gift",
+      "retirement gifts for men teachers",
+      "farewell gift desktop",
+      "retirement 911 gift",
+      "retirement clock never under estimate",
+      "retirement male teacher gift",
+      "retirement gifts for men aloha",
+      "retirement gifts from staff",
+      "pa retirement gift",
+      "retirement watch engravement"
+    ]
+  },
+  {
+    "id": "1277606101",
+    "title": "Diamond Starburst Retirement Earrings: Handmade Sterling Silver or Gold",
+    "url": "https://www.etsy.com/listing/1277606101/diamond-starburst-retirement-earrings",
+    "image": "https://i.etsystatic.com/7226765/r/il/40cb9f/8152606562/il_fullxfull.8152606562_16cp.jpg",
+    "tags": [
+      "retirement jewelry",
+      "womans retirement gift",
+      "retirement gifts for women jewelry",
+      "retirement gifts for women",
+      "retirement gifts for her",
+      "retirement earrings",
+      "womans ruby anniversary earrings",
+      "straight line earrings",
+      "jewelry retirement gifts",
+      "retirement gifts for women earrings",
+      "rose gold cocktail glass earrings",
+      "pave diamond disk earrings",
+      "moissanite station earring",
+      "pave diamond mushroom earring",
+      "antique platinum post earrings",
+      "9ct gold turquoise earring",
+      "gold disc earrings with diamonds",
+      "diamond airplane earrings",
+      "paperclip drop earring",
+      "pierced lever back earrings",
+      "earrings buttercup setting",
+      "lab diamond snowflake earrings",
+      "sterling silver hoop drop gem"
+    ]
+  },
+  {
+    "id": "1279182643",
+    "title": "Men's Funny Retirement Shirt Retired Under New Management Tee Retirement Gifts Retired Husband Dad Grandpa Gifts Funny Gift For Retiree",
+    "url": "https://www.etsy.com/listing/1279182643/mens-funny-retirement-shirt-retired",
+    "image": "https://i.etsystatic.com/29471436/r/il/d75cc3/4106593651/il_fullxfull.4106593651_q3vs.jpg",
+    "tags": [
+      "funny retirement t shirt",
+      "retired under new management",
+      "retired under new management shirt",
+      "retirement gift",
+      "shirt for men",
+      "retirement t shirts",
+      "retirement gifts for men",
+      "retirement gifts for him",
+      "retired mens gifts",
+      "dad retirement shirt",
+      "retired shirt man",
+      "psychologist retirement gift man",
+      "retired banker gift",
+      "retired t shirt dri fit men",
+      "retired tshirt the office",
+      "in my retirement era men",
+      "retirement shirts for men canada",
+      "retired for man",
+      "retired under new management tee",
+      "retirement shirt funny man",
+      "gifts for the fisherman retired",
+      "shirt retirement",
+      "retired but now the manny"
+    ]
+  },
+  {
+    "id": "1479427897",
+    "title": "Celebratory Retirement Wine Glass, Option to Add Custom Backside Text, Gifts for Retirees, Retirement Present, Design: RETIRED5",
+    "url": "https://www.etsy.com/listing/1479427897/celebratory-retirement-wine-glass-option",
+    "image": "https://i.etsystatic.com/8721881/r/il/f66135/4943210409/il_fullxfull.4943210409_16a0.jpg",
+    "tags": [
+      "retirement wine glass",
+      "wine glass",
+      "pairs well with retirement",
+      "retirement champagne glass",
+      "retirement glass quiter",
+      "retirement wine glass personalized",
+      "wine glass personalized retirement",
+      "wine glasses retired teacher",
+      "retirement engraved glassware",
+      "wine glass retirement from cdcr",
+      "tetirementnwine glass",
+      "wine lovers retirement",
+      "retirement stemless glass",
+      "retirement wine glasses 4 guest",
+      "retirement wine glass customizable",
+      "retirement wine cups",
+      "retirement wine glass men",
+      "retirement gifts wine glasses customize",
+      "happy retirement wine",
+      "retirement joke glasses",
+      "retirement gifts for her wine",
+      "retirement wine glass man"
+    ]
+  },
+  {
+    "id": "1515462821",
+    "title": "Funny Retirement Gifts for Women, Retirement Plant Pot for Boss, Retired Gifts for Coworker, Funny Succulent Planter",
+    "url": "https://www.etsy.com/listing/1515462821/funny-retirement-gifts-for-women",
+    "image": "https://i.etsystatic.com/24866528/r/il/11a76c/7792349878/il_fullxfull.7792349878_1zpv.jpg",
+    "tags": [
+      "retirement pot",
+      "retirement planter",
+      "retirement plant",
+      "soap flowers retirement",
+      "retirement gifts for women funny",
+      "retirement gifts for women",
+      "plant for retirement",
+      "retirement plant pot personalized",
+      "retirement gifts for garden lovers",
+      "retirement planter nursing wooden",
+      "retirement gifts planter box",
+      "succulent planter retirement",
+      "fun gifts relaxation retirement",
+      "retire gardening",
+      "retiring assistant superintendent planter",
+      "succulent retirement gift",
+      "retirement gift for ot",
+      "retirement gifts for women plants",
+      "retirement plant humor",
+      "women retirement teacher gifts 2026",
+      "a wise woman planter",
+      "pharmacy technician retirement gifts",
+      "boss plant pot"
+    ]
+  },
+  {
+    "id": "1566303257",
+    "title": "Funny Dice Retirement Gifts for Women Men Funny Christmas Gifts Happy Retirement Gifts for Coworker Colleague Employee Appreciation Gifts",
+    "url": "https://www.etsy.com/listing/1566303257/funny-dice-retirement-gifts-for-women",
+    "image": "https://i.etsystatic.com/24818246/r/il/a627fa/5337742363/il_fullxfull.5337742363_98pd.jpg",
+    "tags": [
+      "retirement gift for a pisces",
+      "retirement dice",
+      "retirement man",
+      "retirement gift for woman",
+      "retirement",
+      "retirement gift",
+      "retirement gift for him",
+      "unique retirement gifts",
+      "retirement gifts for women funny",
+      "retirement gifts for men",
+      "retirement gifts for dad",
+      "funny retirement gifts",
+      "retirement gift papi",
+      "retirement dice in spanish",
+      "gag gift retirement",
+      "unique retirement gift for man",
+      "custom decision dice for retirement",
+      "custom funny retirement dice gift",
+      "funny retirement dice",
+      "retirement gift for her dice",
+      "gifts for retired person",
+      "retirement magic 8 ball"
+    ]
+  },
+  {
+    "id": "1729951411",
+    "title": "Personalized Retirement FAREWELL TOUR T-Shirt, Funny Music-themed Music Fan Gift, Custom Shirt for Retiree, Softstyle Tee",
+    "url": "https://www.etsy.com/listing/1729951411/personalized-retirement-farewell-tour-t",
+    "image": "https://i.etsystatic.com/45160991/r/il/c4ff73/7636947720/il_fullxfull.7636947720_p3c8.jpg",
+    "tags": [
+      "retirement gift for musician",
+      "retirement t shirt",
+      "retirement tshirt",
+      "retirement shirt",
+      "retirement",
+      "retirement gifts for men",
+      "retirement gift ideas",
+      "men retirement gift",
+      "retirement gifts guy",
+      "retired teacher gifts man",
+      "retirement shirts personalized",
+      "rockin into retirement",
+      "retirement t shirt playlist",
+      "t shirt for retired minister",
+      "retirement gift for men shirt",
+      "retirement tour check off shirt",
+      "retire musician tshirt",
+      "retirement gift for male funny",
+      "quitter retirement t shirt",
+      "farewell tour retirement shirt woman",
+      "retiring soon shirts"
+    ]
+  },
+  {
+    "id": "1760665413",
+    "title": "Custom Retirement Bookmark for Women Men 2026 Personalized Happy Retirement Farewell Gifts for Teacher Coworkers Boss Lady Mom Grandparents",
+    "url": "https://www.etsy.com/listing/1760665413/custom-retirement-bookmark-for-women-men",
+    "image": "https://i.etsystatic.com/52355640/r/il/0e6b1c/6167804219/il_fullxfull.6167804219_s74s.jpg",
+    "tags": [
+      "retiring teacher gift female",
+      "retirement bookmark",
+      "retirement gift for woman",
+      "teacher retirement gift",
+      "retired teacher",
+      "retirement",
+      "retirement gift",
+      "women retirement gift",
+      "retirement gifts woman",
+      "retirement gifts for mom",
+      "tender retirement gifts",
+      "secretary retirement gifts",
+      "retiremtn book marks",
+      "personalised book mark retirement",
+      "personalized retired teacher bookmark",
+      "retirement gift client female",
+      "retirement bookmark female",
+      "retirement book marks snarky",
+      "teacher retirement gifts faith",
+      "reader retirement gifts",
+      "personalized bookmark, retirement, fast shipping",
+      "retirement gifts for the traveler"
+    ]
+  },
+  {
+    "id": "1808037670",
+    "title": "Happy Retirement Memory Book, Personalized Retirement Gift for Him or Her, Wooden Album, Sign-in Photo Album, Retirement Gift for Coworker",
+    "url": "https://www.etsy.com/listing/1808037670/happy-retirement-memory-book",
+    "image": "https://i.etsystatic.com/9598617/r/il/8cb8cd/6710288838/il_fullxfull.6710288838_3kee.jpg",
+    "tags": [
+      "retirement scrap book",
+      "retirement book",
+      "retirement photo",
+      "retirement photo album",
+      "retirement scrapbook",
+      "retirement book with pictures",
+      "personalized retirement book",
+      "8x11 book cover retirement",
+      "retirement photoboard",
+      "retirement reflection book",
+      "happy retirement book",
+      "wooden retirement scrapbook",
+      "teacher gift retire",
+      "retirement book for teachers",
+      "retirement book for client letters",
+      "retirement photo album and journal",
+      "personalized photo album retirement",
+      "retirement book of memories personalized",
+      "customize scrapbook retirement",
+      "album for retirement cards",
+      "retirement exclusive gift",
+      "retirement coffee table photo book"
+    ]
+  },
+  {
+    "id": "1823935883",
+    "title": "Retirement Shirt, Comfort Colors® Retirement Gifts For Women, Retirement Gift, Teacher Retirement Gift, Gift Mothers Day, for Grandma",
+    "url": "https://www.etsy.com/listing/1823935883/comfort-colors-retirement-gifts-for",
+    "image": "https://i.etsystatic.com/24155927/r/il/b4150a/7844119560/il_fullxfull.7844119560_ltwb.jpg",
+    "tags": [
+      "retirement shirt",
+      "grandma shirt",
+      "retirement",
+      "retirement gift",
+      "retirement gift for mom",
+      "womens retirement gifts",
+      "women shirt",
+      "seamstobeshirts",
+      "retirement tshirts",
+      "retirement gifts for women friend",
+      "mothers day shirt",
+      "retired meme",
+      "retirement gifts for mimi",
+      "retired teacher to grandma",
+      "retirement gift for grandma",
+      "retired grammy",
+      "retirement see grandkids",
+      "retired mamaw shirt",
+      "happy retirement grandma",
+      "retired grandma",
+      "retired mom shirt",
+      "retirement for grandma"
+    ]
+  },
+  {
+    "id": "1845957792",
+    "title": "Personalized Retirement 2026 Coffee Mug, Happy Retirement Cup, Custom Retirement Gift For Boss Co Worker, Officially Retired Cup For Her",
+    "url": "https://www.etsy.com/listing/1845957792/personalized-retirement-2025-coffee-mug",
+    "image": "https://i.etsystatic.com/53093696/r/il/f28839/6623180693/il_fullxfull.6623180693_2fwz.jpg",
+    "tags": [
+      "retirement mug",
+      "happy retirement",
+      "gift for retirement",
+      "custom retirement gifts",
+      "boss retirement gift",
+      "coffee mug for retirement",
+      "retirement personalized gifts",
+      "happy retirement mug",
+      "retirement gift coffee mug",
+      "retirement business sold",
+      "mugs for retired copy editors",
+      "retired mug for her",
+      "happy retirement mug personalized",
+      "retirement cup mug",
+      "cute retirement mugs",
+      "retirement coffee mugs 15 oz",
+      "mug coolgiftscreations retirement",
+      "retirement coffee mug 2026",
+      "retirement gifts coffee cup",
+      "mugs for retirement 2025",
+      "mugs for retired teacher",
+      "retirement gifts laboratory",
+      "vintage retirement gifts"
+    ]
+  },
+  {
+    "id": "1872834716",
+    "title": "Personalised Bronze Retirement Desk Clock - Engraved Desk Gift",
+    "url": "https://www.etsy.com/listing/1872834716/personalised-bronze-retirement-desk",
+    "image": "https://i.etsystatic.com/57680787/r/il/afb197/6824239385/il_fullxfull.6824239385_d2f9.jpg",
+    "tags": [
+      "retirement gift clock",
+      "retirement clock",
+      "retirement gift",
+      "retirement gift for men",
+      "mens retirement gifts",
+      "engraved retirement gift",
+      "retirement paperweight",
+      "retirement for doctor gift",
+      "jubilacion reloj escritorio",
+      "personalize retirement gifts",
+      "retirement clock man",
+      "retirement clock plaque",
+      "retirement business owner gift",
+      "retirement clock sign book",
+      "happy retirement clock",
+      "mens retirement clock",
+      "statue retirement honoring",
+      "retirement gifts for men clock",
+      "personalised retirement gifts woman",
+      "retirement gifts for our doctor",
+      "unique retirement gift men",
+      "retirement crystal gifts",
+      "retirement gift men boss"
+    ]
+  },
+  {
+    "id": "1887229942",
+    "title": "Comfort Colors® Retired Gigi Shirt, I'm Not Retired Full Time Gigi Shirts, Gift for Mother's Day, Funny Retirement Shirt for Grandma From",
+    "url": "https://www.etsy.com/listing/1887229942/comfort-colors-retired-gigi-shirt-im-not",
+    "image": "https://i.etsystatic.com/24155927/r/il/6fbfff/8021059724/il_fullxfull.8021059724_sgki.jpg",
+    "tags": [
+      "gigi shirt",
+      "gigi",
+      "grandma shirt",
+      "retired shirt",
+      "shirt",
+      "retired gigi shirt",
+      "gigi gifts",
+      "retired grammy",
+      "im not retired",
+      "retire shirt full time gigi",
+      "mothers day gift for gigi",
+      "full time gigi",
+      "full time grandma personalized",
+      "full time grandma",
+      "retired gigi",
+      "retired mamaw shirt",
+      "mimi retirement shirts",
+      "full time grandma customized",
+      "full time granny",
+      "not retired full time mimi",
+      "retirement gift gigi",
+      "retired grandma tee",
+      "grandmas retirement shirt personalized"
+    ]
+  },
+  {
+    "id": "1901414769",
+    "title": "Comfort Colors® Mimi Gifts, Mimi, Mimi Gift, Mimi Shirt, Full Time Mimi Shirts, Gift for Mother's Day, Retirement Grandma Tee, New Mimi",
+    "url": "https://www.etsy.com/listing/1901414769/comfort-colors-mimi-gifts-mimi-mimi-gift",
+    "image": "https://i.etsystatic.com/24155927/r/il/e230f2/8068948065/il_fullxfull.8068948065_9tum.jpg",
+    "tags": [
+      "mimi t shirt",
+      "mimi shirt",
+      "retirement tshirt",
+      "shirt",
+      "mimi mothers day",
+      "mimi gifts",
+      "mimi and papa gifts",
+      "retired mimi shirt",
+      "great mimi shirt",
+      "best mimi shirt",
+      "retired mimi",
+      "retired but not retired",
+      "mimi christmas gifts",
+      "full time mimi",
+      "mimi shirt floral",
+      "not retired full time mimi",
+      "mimi fix everything shirt",
+      "promoted to full time grandma",
+      "mimi shirt grandma",
+      "mom mimi gifts",
+      "mimi shirts woman",
+      "violetsnows, mimi shirts",
+      "mimi polynesian"
+    ]
+  },
+  {
+    "id": "1901415721",
+    "title": "Comfort Colors® Retired Nana Shirt, I'm Not Retired Full Time Nana Shirts, Gift for Mother's Day, Funny Retirement Shirt for Grandma From",
+    "url": "https://www.etsy.com/listing/1901415721/comfort-colors-retired-nana-shirt-im-not",
+    "image": "https://i.etsystatic.com/24155927/r/il/7a5a27/8021027190/il_fullxfull.8021027190_p7cn.jpg",
+    "tags": [
+      "retired nana shirt",
+      "retired shirt",
+      "nana shirt",
+      "nana gift",
+      "shirt",
+      "nanas garden",
+      "im not retired",
+      "full time grandma",
+      "retired mimi shirt",
+      "retired grammy",
+      "nana retirement gift",
+      "full time grandma personalized",
+      "full time gigi",
+      "full time grandma customized",
+      "full time granny",
+      "retired gigi",
+      "grandmas retirement shirt personalized",
+      "retired mamaw shirt",
+      "not retired full time mimi",
+      "retired full time nonna",
+      "retired grandma tee",
+      "funny grandkids shirts"
+    ]
+  },
+  {
+    "id": "1904158375",
+    "title": "Comfort Colors® Teacher Retirement Shirt, Schools Out Forever Shirts, Gift For Teacher Retirement, Retired Teacher Gift Teacher Appreciation",
+    "url": "https://www.etsy.com/listing/1904158375/comfort-colors-teacher-retirement-shirt",
+    "image": "https://i.etsystatic.com/24155927/r/il/b2affa/6796884752/il_fullxfull.6796884752_tkhg.jpg",
+    "tags": [
+      "shirts",
+      "teacher retirement t shirt",
+      "teacher retirement gift",
+      "retired teacher",
+      "teacher shirt",
+      "schools out forever shirt",
+      "schools out forever",
+      "retired teacher gift shirt",
+      "teacher retirement shirt",
+      "teacher retirement 30+ years shirt",
+      "retirement shirts for women teachers",
+      "retired but forever a teacher",
+      "retirement foolery",
+      "teacher retirement survivor theme",
+      "teacherretirement shirt by seamstobeshirts",
+      "teacher retirement tshirt comfort colors",
+      "retired teacher shirt farewell tour",
+      "retired shirt school",
+      "retired teacher sayings",
+      "schools out forever transfer",
+      "retired teacher canvas shirt",
+      "teacher retiring early shirt"
+    ]
+  },
+  {
+    "id": "1904286773",
+    "title": "Grammy Gifts, I’m Not Retired I'm A Full Time Grammy, Comfort Colors® Retired Grammy Shirt, Gift for Mother's Day, Retirement Shirt Grandma",
+    "url": "https://www.etsy.com/listing/1904286773/comfort-colors-retired-grammy-shirt-im",
+    "image": "https://i.etsystatic.com/24155927/r/il/cf9b98/8021059972/il_fullxfull.8021059972_8hb9.jpg",
+    "tags": [
+      "shirt",
+      "funny shirt",
+      "retired grammy",
+      "full time grammy",
+      "full time grandma",
+      "grammy gift retired",
+      "full time gigi",
+      "retired gigi",
+      "full time grandma personalized",
+      "retirement gift gigi",
+      "full time granny",
+      "mimi retirement shirts",
+      "full time grandma customized",
+      "retired mamaw shirt",
+      "mimi gifts retired",
+      "not retired full time mimi",
+      "grandma teacher",
+      "what happens at nanas tshirt",
+      "grandmas retirement shirt personalized",
+      "gigi shirt funny",
+      "grammie socks"
+    ]
+  },
+  {
+    "id": "4430648097",
+    "title": "Comfort Colors Floral Retirement Shirt for Teachers 'A New Chapter Begins' Retired Gift",
+    "url": "https://www.etsy.com/listing/4430648097/floral-retirement-shirt-for-teachers-a",
+    "image": "https://i.etsystatic.com/23699457/r/il/6d045f/7540271344/il_fullxfull.7540271344_h2z5.jpg",
+    "tags": [
+      "teacher retirement t shirt",
+      "teacher retirement",
+      "retirement shirt",
+      "retirement",
+      "retirement shirts for women",
+      "retired teacher gifts",
+      "retired teacher gift female",
+      "retirement reader",
+      "retired librarian shirt",
+      "women retirement tshirts",
+      "retired teacher shirt kindergarten",
+      "retired a new chapter begins",
+      "retirement from teaching bookmarks",
+      "retirement decor for shirts",
+      "teacher retirement tshirt comfort colors",
+      "retired teacher 32 years",
+      "kindergarten teacher retirement short",
+      "retiring preschool tshirt",
+      "retired art teacher t shirt",
+      "retired teacher canvas shirt",
+      "t shirts for retiring woman teachers",
+      "retired kindergarten teacher tshirt",
+      "retirement gift for library teacher"
+    ]
+  },
+  {
+    "id": "4454560536",
+    "title": "Retired Sweatshirt with Heart or Comfort Colors T-shirt Retirement Gift Cozy Crewneck or Tee Retired Party Outfit Funny Group Friend Gift",
+    "url": "https://www.etsy.com/listing/4454560536/retired-sweatshirt-with-heart-or-comfort",
+    "image": "https://i.etsystatic.com/55422787/r/il/4e5970/7737212185/il_fullxfull.7737212185_6o5y.jpg",
+    "tags": [
+      "retirement woman",
+      "retired sweatshirt",
+      "retirement",
+      "retired embroidery file",
+      "women retirement gifts",
+      "unique retirement gifts for her",
+      "retirement gifts for women",
+      "personalized retirement sweatshirt",
+      "retired zip sweatshirt",
+      "sweatshirt for retired teacher",
+      "retirement gifts from teaching",
+      "plus size retirement apparel",
+      "retirement gifts for women sweatshirt",
+      "100% retired",
+      "purple retirement shirt",
+      "woman retired sweatshirt",
+      "retired long sleeve women",
+      "retired crewneck sweatshirt watermelon embroidered",
+      "retired sweat shirt",
+      "retired sweatshirt minimum print",
+      "embroidered retired 2026 sweatshirt",
+      "hooded sweatshirts retirement womens",
+      "custom retirement sweatshirt"
+    ]
+  },
+  {
+    "id": "4517614991",
+    "title": "Funny Whiskey Cigar Shirt, I'll Be in the Backyard Tee, BBQ Grilling Bourbon Lover, Fathers Day Gift for Dad Husband",
+    "url": "https://www.etsy.com/listing/4517614991/funny-whiskey-cigar-shirt-ill-be-in-the",
+    "image": "https://i.etsystatic.com/18650998/r/il/f36bfe/8154948983/il_fullxfull.8154948983_j8qt.jpg",
+    "tags": [
+      "shirt",
+      "funny tshirt",
+      "chillin in the backyard",
+      "gifts for guys unique",
+      "funny father day gift",
+      "backyard dad",
+      "fathers day backyard tee shirt",
+      "smoker t shirts",
+      "bbq gifts tshirts",
+      "chummy tees in my backyard",
+      "bourbon men gifts",
+      "in my backyard tshirt",
+      "grilling shirts for husband",
+      "funny whisky decanter set",
+      "dad jokes whiskey glass",
+      "gifts for boyfriends father",
+      "meat whisperer rub tshirt",
+      "bourbon gifts for boyfriend",
+      "bourbon gifts for grandpa",
+      "men gifts for bourbon lovers",
+      "mens backyard tshirt",
+      "whiskey conisuerr born in may"
+    ]
+  },
+  {
+    "id": "4301761175",
+    "title": "Comfort Colors® Retirement Gifts For Men, Retirement Shirt for Men, I'm Not Retired Full Time Grandpa Shirts Men, Funny Gift for Fathers Day",
+    "url": "https://www.etsy.com/listing/4301761175/comfort-colors-retirement-gifts-for-men",
+    "image": "https://i.etsystatic.com/24155927/r/il/585baa/7865200076/il_fullxfull.7865200076_okv9.jpg",
+    "tags": [
+      "retired grandpa",
+      "retirement shirt",
+      "retirement",
+      "retirement gift",
+      "grandpa shirt",
+      "grandpa gift",
+      "shirt",
+      "retirement men",
+      "retirement gifts for men funny",
+      "retirement gifts for men",
+      "retirement for men",
+      "funny grandpas shirt",
+      "retired shirt for man",
+      "pawpaw retirement gift",
+      "papaw retirement",
+      "retirement gifts men grandpa",
+      "retirement gifts for papa",
+      "custom shirt retired dad",
+      "retired papa tall size",
+      "not retired grandpa",
+      "professional papa",
+      "full time grandpa",
+      "retired dad funny shirt"
+    ]
+  },
+  {
+    "id": "4351848076",
+    "title": "Embroidered Grandma Sweatshirt – Personalized Grandkids Names, Comfort Colors®",
+    "url": "https://www.etsy.com/listing/4351848076/custom-embroidered-grandma-sweatshirt",
+    "image": "https://i.etsystatic.com/60628664/r/il/7d714a/7155400817/il_fullxfull.7155400817_360l.jpg",
+    "tags": [
+      "grandmother sweatshirt",
+      "grandpa sweatshirt",
+      "grandparent sweatshirt",
+      "custom grandma sweatshirt",
+      "name shirt",
+      "grandma shirt",
+      "grandma sweatshirt",
+      "personalized sweatshirts for women",
+      "personalized grandma sweatshirt",
+      "mothers day gifts for grandma",
+      "grandma sweatshirt embroidered",
+      "grandma mothers day gift",
+      "personalized crew necks",
+      "grandma gifts",
+      "custom embroidered sweatshirt",
+      "certified grandma",
+      "personalized lovey shirt",
+      "lovie sweatshirt custom",
+      "comfort colors embroidered mimi sweatshirt",
+      "comfort colors embroidered sweatshirt nanny",
+      "embroidered honey luxury sweatshirt",
+      "embroidered grandma sweatshirt kids names",
+      "lovey crew neck"
+    ]
+  },
+  {
+    "id": "4487816081",
+    "title": "Customizable Retirement Blanket Custom Gift For Women Retired Nurse Teacher Doctor Personalizable Employee Goodbye Coworker Farewell Present",
+    "url": "https://www.etsy.com/listing/4487816081/customizable-retirement-blanket-custom",
+    "image": "https://i.etsystatic.com/61483541/r/il/682797/7955087971/il_fullxfull.7955087971_3cz4.jpg",
+    "tags": [
+      "catholic retirement blanket",
+      "teacher retirement blanket",
+      "retirement blanket for teacher",
+      "np retirement gift",
+      "retirement gifts blanket",
+      "retirement throw",
+      "retirement gift for ob nurse",
+      "pediatrician retirement blanket",
+      "gift for retired vet tech",
+      "gift for retirement coworker female",
+      "retirement gifts nurse manager",
+      "useful gift for retiring boss",
+      "customizable retirement blanket",
+      "custom nurse retirement plaque",
+      "retiring female boss gift",
+      "retirement blanket for a nurse",
+      "personalized retirement throw",
+      "retirement blanket scripture",
+      "retirement blankets nurses",
+      "retirement blanket with dream catchers",
+      "retirement of women doctor",
+      "retirement gift for a oncologist",
+      "funny retirement blankets from coworkers"
+    ]
+  },
+  {
+    "id": "4340101715",
+    "title": "Custom Retirement The Legend Your Name Has Officially Retired Whiskey Decanter Gift Set Bourbon Glasses, Whiskey Stones, Tongs & Wood Box",
+    "url": "https://www.etsy.com/listing/4340101715/custom-retirement-the-legend-your-name",
+    "image": "https://i.etsystatic.com/31771508/r/il/670eee/7093280397/il_fullxfull.7093280397_p896.jpg",
+    "tags": [
+      "s4eoriginals retirement decanter gift",
+      "retirement bourbon",
+      "retirement gift",
+      "unique retirement gifts for her",
+      "retirement gifts for men",
+      "retirement gifts alcohol",
+      "male retirement gifts",
+      "retirement whiskey gift",
+      "retirement whiskey glass customized",
+      "personalized retirement gift for dad",
+      "retirement gifts for men accountant",
+      "custom whiskey retirement",
+      "retirement set",
+      "custom whiskey bottle retirement",
+      "retirement gift for men wine",
+      "engraved retirement margarita glasses",
+      "officially retired whiskey",
+      "bourbon retirement gift ideas",
+      "not my problem anymore whiskey",
+      "farewell custom retirement gifts men",
+      "podiatrist retirement old fashioned glasses",
+      "retirement gifts for men personalize",
+      "retirement liquor glass"
+    ]
+  },
+  {
+    "id": "4481780676",
+    "title": "Tree of Life Retired Glass Suncatcher, Personalized Retirement Gift 2026, Farewell Gift for Teacher, Nurse, Coworker, Retirement Keepsake",
+    "url": "https://www.etsy.com/listing/4481780676/tree-of-life-retired-glass-suncatcher",
+    "image": "https://i.etsystatic.com/59025196/r/il/e5975a/7917694757/il_fullxfull.7917694757_8rsu.jpg",
+    "tags": [
+      "suncatcher tree",
+      "teacher gift who is retiring",
+      "retirement gift",
+      "retiring nurse",
+      "suncatcher",
+      "teacher",
+      "unique retirement gifts",
+      "retirement wind chime personalized",
+      "nurse retirement gifts",
+      "retirement sun catcher",
+      "retirement tetirememt gifts",
+      "retiring school nurse",
+      "stain glass retirement picture",
+      "meaningful retirement",
+      "daycare retirement suncatcher",
+      "retirement gifts for teacher man",
+      "stainglass retirement",
+      "gift for retired colleague",
+      "personalized stained glass retirement",
+      "retirement gifts for oma",
+      "gifts for retirement woman friend",
+      "retirement recognition gift"
+    ]
+  },
+  {
+    "id": "4481492333",
+    "title": "MINNIE MOUSE | 3\" Just Retired Button | Retired Pin | Retirement Trip | Personalizable | Walt Disney World | Disneyland | Disney Cruise Line",
+    "url": "https://www.etsy.com/listing/4481492333/minnie-mouse-3-just-retired-button",
+    "image": "https://i.etsystatic.com/64201265/r/il/4b3ef7/7915908525/il_fullxfull.7915908525_gb28.jpg",
+    "tags": [
+      "disneyland anniversary button",
+      "mickey mouse retirement party",
+      "mickey retirement",
+      "4 park challenge button",
+      "backside of water accessories",
+      "dinsey shirt ping",
+      "disneyland retire button",
+      "retired buttoned shirt",
+      "dcl anniversary button",
+      "personalized disneyworld shirts retirement 2026",
+      "disneyland 70th anniversary button",
+      "celebration buttons dcl",
+      "retired mickey gift",
+      "birthday button disneyworld",
+      "mickey cruise pin",
+      "first time disneyworld button",
+      "1st visit badge",
+      "disneyland 70 years ornament",
+      "disneyland first visit pin",
+      "dcl pin"
+    ]
+  },
+  {
+    "id": "4478483599",
+    "title": "Retirement Journey Shadow Box Art: Pebble Bird Lovers Gift",
+    "url": "https://www.etsy.com/listing/4478483599/retirement-journey-shadow-box-art-pebble",
+    "image": "https://i.etsystatic.com/6135023/r/il/1d56e4/7848213468/il_fullxfull.7848213468_pfsm.jpg",
+    "tags": [
+      "retirement pebble art",
+      "retirement gift for friend",
+      "retirement gift for woman",
+      "retirement",
+      "retirement gift",
+      "unique retirement gifts for her",
+      "retirements gifts for women",
+      "retirement gifts for women friend",
+      "retirement photo shadow box",
+      "retirement bird",
+      "retirement shadow box sea glass",
+      "retirement from office job",
+      "gift for retired women",
+      "painted rocks retirement",
+      "nurse sea glass retirement art",
+      "sea glass retirement gift friend",
+      "retirement poem gift",
+      "retirement gifts for banker",
+      "retirement shadow box for nurse",
+      "box frames retirement",
+      "retirement keepsakes pitchers",
+      "newspaper frame for retirement",
+      "nurse sea glass retirement"
+    ]
+  }
+];
+
+const grid = document.getElementById('grid');
+const empty = document.getElementById('empty');
+const qEl = document.getElementById('q');
+const sortEl = document.getElementById('sort');
+const countEl = document.getElementById('count');
+document.getElementById('total').textContent = DATA.length;
+
+function esc(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function highlight(text, q) {
+  if (!q) return esc(text);
+  const i = text.toLowerCase().indexOf(q.toLowerCase());
+  if (i < 0) return esc(text);
+  return esc(text.slice(0, i)) + '<mark>' + esc(text.slice(i, i + q.length)) + '</mark>' + esc(text.slice(i + q.length));
+}
+
+function render() {
+  const q = qEl.value.trim().toLowerCase();
+  let rows = DATA.map((d, i) => ({ ...d, _rank: i + 1 }));
+
+  if (q) {
+    rows = rows.filter(d =>
+      d.title.toLowerCase().includes(q) ||
+      d.tags.some(t => t.toLowerCase().includes(q))
+    );
+  }
+
+  const sort = sortEl.value;
+  if (sort === 'tags-desc') rows.sort((a, b) => b.tags.length - a.tags.length);
+  else if (sort === 'tags-asc') rows.sort((a, b) => a.tags.length - b.tags.length);
+  else if (sort === 'title') rows.sort((a, b) => a.title.localeCompare(b.title));
+
+  countEl.textContent = rows.length + ' of ' + DATA.length + ' shown';
+  empty.hidden = rows.length > 0;
+
+  grid.innerHTML = rows.map(d => `
+    <article class="card">
+      <div class="thumb">
+        <span class="rank">#${d._rank}</span>
+        <span class="bs">★ Best Seller</span>
+        <a href="${esc(d.url)}" target="_blank" rel="noopener">
+          <img loading="lazy" src="${esc(d.image)}" alt="${esc(d.title)}" />
+        </a>
+      </div>
+      <div class="body">
+        <h3><a href="${esc(d.url)}" target="_blank" rel="noopener">${highlight(d.title, q)}</a></h3>
+        <div class="tags">
+          ${d.tags.map(t => `<span class="tag${q && t.toLowerCase().includes(q) ? ' hit' : ''}" data-tag="${esc(t)}">${esc(t)}</span>`).join('')}
+        </div>
+        <div class="meta">
+          <span>${d.tags.length} tags</span>
+          <a href="${esc(d.url)}" target="_blank" rel="noopener">View on Etsy ↗</a>
+        </div>
+      </div>
+    </article>
+  `).join('');
+}
+
+grid.addEventListener('click', e => {
+  const tag = e.target.closest('.tag');
+  if (tag) { qEl.value = tag.dataset.tag; render(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+});
+qEl.addEventListener('input', render);
+sortEl.addEventListener('change', render);
+render();
+</script>
+</body>
+</html>
