@@ -111,6 +111,35 @@
   .btn:disabled { opacity: .6; cursor: progress; }
   .btn.secondary { background: #fff; color: var(--ink); border-color: var(--border); }
 
+  /* AI metadata on listing cards */
+  .ai-meta { border-top: 1px dashed var(--border); margin-top: 4px; padding-top: 10px; display: flex; flex-direction: column; gap: 7px; }
+  .ai-summary { font-size: 12px; color: var(--muted); font-style: italic; line-height: 1.4; }
+  .ai-phrase { font-size: 12.5px; color: var(--ink); }
+  .ai-phrase b { font-weight: 700; }
+  .ai-row { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; }
+  .ai-row .ai-k { font-size: 10px; text-transform: uppercase; letter-spacing: .4px; color: var(--muted); margin-right: 2px; }
+  .ai-badge {
+    font-size: 11px; padding: 2px 8px; border-radius: 999px; font-weight: 600;
+    background: #eef; border: 1px solid var(--border); color: var(--ink); cursor: pointer;
+  }
+  .ai-badge.style { background: #eaf2ff; border-color: #c9def0; color: #1c4e8a; }
+  .ai-badge.aesthetic { background: #fdeefb; border-color: #f3cdee; color: #8a2079; }
+  .ai-badge.value { background: #eefaf0; border-color: #c8ead0; color: #1f6f3a; }
+  .ai-badge.cross { background: #fff4e6; border-color: #f3dcc4; color: #8a5a1c; }
+  .ai-badge.font { background: #f1eefb; border-color: #d8cdf3; color: #4a2f8a; }
+  .ai-badge.color { background: #f3f3f3; border-color: var(--border); color: #444; }
+  .ai-badge:hover { filter: brightness(.97); }
+  .card.untagged .ai-meta { display: none; }
+  .analyzing-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); display: inline-block; animation: pulse 1s infinite; }
+  @keyframes pulse { 0%,100% { opacity: .3; } 50% { opacity: 1; } }
+  .ai-progress { font-size: 12px; color: var(--muted); margin-left: auto; }
+
+  /* Rule book example thumbnails */
+  .rb-examples { display: flex; gap: 5px; margin-top: 5px; flex-wrap: wrap; }
+  .rb-examples a { display: block; width: 40px; height: 40px; border-radius: 7px; overflow: hidden; border: 1px solid var(--border); }
+  .rb-examples img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .rb-item.has-ex { flex-direction: column; align-items: flex-start; }
+
   /* Niche chips row */
   .niches { display: flex; gap: 10px; flex-wrap: wrap; margin: 12px auto 0; max-width: 1500px; padding: 0 24px; }
   .niche-chip {
@@ -243,7 +272,9 @@
         <option value="tags-asc">Fewest tags first</option>
         <option value="title">Title A–Z</option>
       </select>
+      <button class="btn secondary" id="analyzeBtn" title="Tag listing images with rule-book metadata using your AI key">✦ Analyze with AI</button>
       <span class="count" id="count"></span>
+      <span class="ai-progress" id="aiProgress"></span>
     </div>
     <div class="niches" id="niches" style="padding:0;margin-top:12px"></div>
     <div class="offline-banner" id="offlineBanner" hidden style="margin-top:12px">
@@ -1326,6 +1357,8 @@ const nicheInput = document.getElementById('nicheInput');
 const addBtn = document.getElementById('addNiche');
 const toastEl = document.getElementById('toast');
 const offlineBanner = document.getElementById('offlineBanner');
+const analyzeBtn = document.getElementById('analyzeBtn');
+const aiProgress = document.getElementById('aiProgress');
 
 // App state
 let niches = [];          // [{slug,label,listing_count,created_at}]
@@ -1455,7 +1488,8 @@ function render() {
   if (q) {
     rows = rows.filter(d =>
       (d.title || '').toLowerCase().includes(q) ||
-      (d.tags || []).some(t => t.toLowerCase().includes(q))
+      (d.tags || []).some(t => t.toLowerCase().includes(q)) ||
+      aiMetaText(d.ai_metadata).includes(q)
     );
   }
 
@@ -1471,7 +1505,7 @@ function render() {
   grid.innerHTML = rows.map(d => {
     const price = (d.price != null && d.price !== '') ? `${d.currency ? d.currency + ' ' : ''}${Number(d.price).toFixed(2)}` : '';
     return `
-    <article class="card">
+    <article class="card${d.ai_metadata ? '' : ' untagged'}" data-id="${esc(String(d.id ?? ''))}">
       <div class="thumb">
         <span class="rank">#${d._rank}</span>
         ${price ? `<span class="bs">${esc(price)}</span>` : ''}
@@ -1484,6 +1518,7 @@ function render() {
         <div class="tags">
           ${(d.tags || []).map(t => `<span class="tag${q && t.toLowerCase().includes(q) ? ' hit' : ''}" data-tag="${esc(t)}">${esc(t)}</span>`).join('')}
         </div>
+        <div class="ai-meta">${aiMetaHtml(d.ai_metadata)}</div>
         <div class="meta">
           <span>${(d.tags || []).length} tags</span>
           <a href="${esc(d.url)}" target="_blank" rel="noopener">View on Etsy ↗</a>
@@ -1491,6 +1526,90 @@ function render() {
       </div>
     </article>`;
   }).join('');
+}
+
+// Render the AI rule-book metadata block for one listing.
+function aiMetaHtml(meta) {
+  if (!meta) return '';
+  const row = (key, arr, cls) => {
+    const items = (arr || []).filter(Boolean);
+    if (!items.length) return '';
+    return `<div class="ai-row"><span class="ai-k">${key}</span>${items.map(v => `<span class="ai-badge ${cls}" data-tag="${esc(v)}">${esc(v)}</span>`).join('')}</div>`;
+  };
+  return `
+    ${meta.summary ? `<div class="ai-summary">${esc(meta.summary)}</div>` : ''}
+    ${meta.phrase ? `<div class="ai-phrase"><b>Phrase:</b> “${esc(meta.phrase)}”</div>` : ''}
+    ${row('Style', meta.design_styles, 'style')}
+    ${row('Aesthetic', meta.aesthetics, 'aesthetic')}
+    ${row('Value add', meta.value_adds, 'value')}
+    ${row('Element', meta.cross_niche, 'cross')}
+    ${row('Type', meta.typography, 'font')}
+    ${row('Color', meta.colors, 'color')}`;
+}
+
+// Flatten AI metadata to a lowercase searchable string.
+function aiMetaText(meta) {
+  if (!meta) return '';
+  return [
+    ...(meta.design_styles || []), ...(meta.aesthetics || []), ...(meta.value_adds || []),
+    ...(meta.cross_niche || []), ...(meta.typography || []), ...(meta.colors || []),
+    meta.phrase || '', meta.summary || ''
+  ].join(' ').toLowerCase();
+}
+
+// Tag every listing image with rule-book metadata via the AI Agent.
+// Runs a small concurrency pool of per-listing /api/analyze calls and updates
+// each card live as results land.
+let analyzing = false;
+async function analyzeAll() {
+  if (analyzing || offline) { if (offline) toast('Connect the backend and configure an AI key first.', true); return; }
+  const targets = listings.filter(l => l.id != null && l.image_url && !l.ai_metadata);
+  if (!targets.length) { toast('All listings are already analyzed.'); return; }
+
+  analyzing = true;
+  analyzeBtn.disabled = true;
+  const original = analyzeBtn.innerHTML;
+  analyzeBtn.innerHTML = '<span class="spinner"></span>Analyzing…';
+  let done = 0, failed = 0;
+  aiProgress.textContent = `0 / ${targets.length}`;
+
+  const updateCard = (id) => {
+    const card = grid.querySelector(`.card[data-id="${CSS.escape(String(id))}"]`);
+    if (!card) return;
+    const l = listings.find(x => x.id === id);
+    card.classList.remove('untagged');
+    const box = card.querySelector('.ai-meta');
+    if (box) box.innerHTML = aiMetaHtml(l.ai_metadata);
+  };
+
+  const worker = async (queue) => {
+    while (queue.length) {
+      const l = queue.shift();
+      try {
+        const data = await api('/api/analyze', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ listing_id: l.id })
+        });
+        l.ai_metadata = data.metadata;
+        updateCard(l.id);
+      } catch (e) {
+        failed++;
+        if (/no ai key/i.test(e.message)) { queue.length = 0; toast(esc(e.message), true); }
+      } finally {
+        done++;
+        aiProgress.textContent = `${done} / ${targets.length}` + (failed ? ` (${failed} failed)` : '');
+      }
+    }
+  };
+
+  const queue = targets.slice();
+  await Promise.all([worker(queue), worker(queue), worker(queue)]);
+
+  analyzing = false;
+  analyzeBtn.disabled = false;
+  analyzeBtn.innerHTML = original;
+  toast(`Analyzed ${done - failed} listing${done - failed === 1 ? '' : 's'}` + (failed ? `, ${failed} failed.` : '.'));
+  setTimeout(() => { aiProgress.textContent = ''; }, 4000);
 }
 
 // ---- Events ----
@@ -1501,13 +1620,14 @@ nichesEl.addEventListener('click', e => {
   if (chip && chip.dataset.slug) selectNiche(chip.dataset.slug);
 });
 grid.addEventListener('click', e => {
-  const tag = e.target.closest('.tag');
-  if (tag) { qEl.value = tag.dataset.tag; render(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+  const tag = e.target.closest('.tag, .ai-badge');
+  if (tag && tag.dataset.tag) { qEl.value = tag.dataset.tag; render(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
 });
 addBtn.addEventListener('click', addNiche);
 nicheInput.addEventListener('keydown', e => { if (e.key === 'Enter') addNiche(); });
 qEl.addEventListener('input', render);
 sortEl.addEventListener('change', render);
+analyzeBtn.addEventListener('click', analyzeAll);
 
 // ======================= TABS =======================
 const views = { niches: document.getElementById('view-niches'), rulebook: document.getElementById('view-rulebook'), settings: document.getElementById('view-settings') };
@@ -1582,11 +1702,15 @@ function renderRulebook() {
     const groupsHtml = Array.from(groups.entries()).map(([g, items]) => `
       ${g ? `<div class="rb-group-label">${esc(g)}</div>` : ''}
       <div class="rb-items">
-        ${items.map(e => `
-          <div class="rb-item">
+        ${items.map(e => {
+          const ex = (e.examples || []).filter(x => x.image_url);
+          return `
+          <div class="rb-item${ex.length ? ' has-ex' : ''}">
             <span class="lbl${cat.dimension === 'phrase' ? ' rb-phrase' : ''}">${highlight(e.label, q)}</span>
             ${e.note ? `<span class="nt">${/^https?:\/\//.test(e.note) ? `<a href="${esc(e.note)}" target="_blank" rel="noopener">${esc(e.note)}</a>` : highlight(e.note, q)}</span>` : ''}
-          </div>`).join('')}
+            ${ex.length ? `<div class="rb-examples">${ex.map(x => `<a href="${esc(x.url || '#')}" target="_blank" rel="noopener" title="Example listing"><img loading="lazy" src="${esc(x.image_url)}" alt=""></a>`).join('')}</div>` : ''}
+          </div>`;
+        }).join('')}
       </div>`).join('');
 
     return `
@@ -1619,6 +1743,11 @@ const aiModelEl = document.getElementById('aiModel');
 const aiKeyEl = document.getElementById('aiKey');
 const saveSettingsBtn = document.getElementById('saveSettings');
 const keyStatusEl = document.getElementById('keyStatus');
+
+const DEFAULT_MODELS = { gemini: 'gemini-2.5-flash', openai: 'gpt-4o', anthropic: 'claude-3-5-sonnet-20241022', groq: 'meta-llama/llama-4-scout-17b-16e-instruct' };
+aiProviderEl.addEventListener('change', () => {
+  aiModelEl.placeholder = 'e.g. ' + (DEFAULT_MODELS[aiProviderEl.value] || 'model name');
+});
 
 function paintKeyStatus(data) {
   if (data.ai_key_set) {
@@ -1662,7 +1791,6 @@ async function saveSettings() {
   }
 }
 saveSettingsBtn.addEventListener('click', saveSettings);
-
 loadNiches();
 </script>
 </body>

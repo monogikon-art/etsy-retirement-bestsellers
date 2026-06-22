@@ -48,12 +48,43 @@ export default async function handler(req, res) {
       byCat.get(e.category_id).push({ label: e.label, note: e.note, grouping: e.grouping });
     }
 
+    // Auto-populated example galleries: bucket AI-tagged listing images by the
+    // rule-book label they were tagged with, per dimension.
+    const tagged = await sql`
+      SELECT image_url, url, ai_metadata
+      FROM listings
+      WHERE ai_metadata IS NOT NULL AND image_url IS NOT NULL`;
+
+    const dimField = {
+      design_style: 'design_styles', aesthetic: 'aesthetics', value_add: 'value_adds',
+      color: 'colors', font: 'typography', cross_niche: 'cross_niche'
+    };
+    // examplesByDim[dimension][lowercased label] -> [{image_url, url}]
+    const examplesByDim = {};
+    for (const t of tagged) {
+      const meta = t.ai_metadata || {};
+      for (const [dim, field] of Object.entries(dimField)) {
+        const labels = Array.isArray(meta[field]) ? meta[field] : [];
+        for (const lbl of labels) {
+          const key = String(lbl).toLowerCase();
+          (examplesByDim[dim] ||= {});
+          (examplesByDim[dim][key] ||= []);
+          if (examplesByDim[dim][key].length < 6) {
+            examplesByDim[dim][key].push({ image_url: t.image_url, url: t.url });
+          }
+        }
+      }
+    }
+
     const result = categories.map((c) => ({
       slug: c.slug,
       name: c.name,
       dimension: c.dimension,
       description: c.description,
-      entries: byCat.get(c.id) || []
+      entries: (byCat.get(c.id) || []).map((e) => ({
+        ...e,
+        examples: (examplesByDim[c.dimension]?.[e.label.toLowerCase()]) || []
+      }))
     }));
 
     return res.status(200).json({ categories: result });

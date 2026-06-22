@@ -18,7 +18,7 @@ export default async function handler(req, res) {
     if (!niche) return res.status(404).json({ error: 'Niche not found.' });
 
     const listings = await sql`
-      SELECT etsy_listing_id, title, url, image_url, price, currency, tags, rank
+      SELECT id, etsy_listing_id, title, url, image_url, price, currency, tags, rank, ai_metadata
       FROM listings
       WHERE niche_id = ${niche.id}
       ORDER BY rank ASC NULLS LAST, id ASC`;
