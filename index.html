@@ -149,40 +149,163 @@
     background: #eef4ff; border: 1px solid #cdddff; color: #355; font-size: 12.5px;
     padding: 10px 14px; border-radius: 10px; margin: 12px auto 0; max-width: 1500px;
   }
+
+  /* Tabs */
+  .tabs { display: flex; gap: 4px; margin-top: 14px; }
+  .tab {
+    font-size: 14px; font-weight: 600; padding: 9px 16px; border: none; cursor: pointer;
+    background: transparent; color: var(--muted); border-radius: 10px 10px 0 0; border-bottom: 2px solid transparent;
+  }
+  .tab:hover { color: var(--ink); }
+  .tab.active { color: var(--accent); border-bottom-color: var(--accent); background: rgba(241,100,30,.06); }
+
+  .view { display: block; }
+  .view[hidden] { display: none; }
+  .viewbar { padding: 16px 24px 0; max-width: 1500px; margin: 0 auto; }
+  .viewbar .controls, .viewbar .niche-bar { margin-top: 0; }
+  .viewbar .niche-bar { margin-bottom: 10px; }
+
+  /* Rule book */
+  .rb-dims { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+  .rb-dim {
+    font-size: 12.5px; font-weight: 600; padding: 7px 12px; border-radius: 999px; cursor: pointer;
+    background: #fff; border: 1px solid var(--border); color: var(--tag-ink); transition: all .12s;
+  }
+  .rb-dim:hover { border-color: var(--accent); }
+  .rb-dim.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .rb-section { margin-bottom: 26px; }
+  .rb-section h2 {
+    font-size: 17px; margin: 0 0 3px; display: flex; align-items: center; gap: 10px;
+  }
+  .rb-pill {
+    font-size: 11px; font-weight: 700; padding: 2px 9px; border-radius: 999px;
+    background: var(--tag-bg); color: var(--tag-ink); text-transform: uppercase; letter-spacing: .4px;
+  }
+  .rb-desc { color: var(--muted); font-size: 13px; margin: 0 0 12px; }
+  .rb-group-label { font-size: 12.5px; font-weight: 700; color: var(--accent-2); margin: 12px 0 8px; }
+  .rb-items { display: grid; gap: 8px; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+  .rb-item {
+    background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px;
+    font-size: 13.5px; box-shadow: var(--shadow);
+  }
+  .rb-item .lbl { font-weight: 600; }
+  .rb-item .nt { display: block; color: var(--muted); font-size: 12px; margin-top: 3px; }
+  .rb-item .nt a { color: var(--accent); }
+  .rb-phrase { font-family: "Segoe UI", system-ui, sans-serif; }
+
+  /* Settings */
+  .settings-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 16px; box-shadow: var(--shadow);
+    max-width: 620px; margin: 0 auto; padding: 24px;
+  }
+  .settings-card h2 { margin: 0 0 4px; font-size: 18px; }
+  .settings-card .hint { color: var(--muted); font-size: 13px; margin: 0 0 18px; }
+  .field { margin-bottom: 16px; }
+  .field label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+  .field input, .field select {
+    width: 100%; font-size: 14px; padding: 10px 12px; border: 1px solid var(--border);
+    border-radius: 10px; background: #fff; color: var(--ink); outline: none;
+  }
+  .field input:focus, .field select:focus { border-color: var(--accent); }
+  .field .sub-note { font-size: 12px; color: var(--muted); margin-top: 5px; }
+  .key-status { font-size: 12.5px; padding: 8px 12px; border-radius: 8px; margin-bottom: 16px; }
+  .key-status.set { background: #ecf7ee; border: 1px solid #c9e6cf; color: #2f6f4f; }
+  .key-status.unset { background: #fff7ef; border: 1px solid #f3dcc4; color: #7a5a32; }
+  .security-note { font-size: 11.5px; color: var(--muted); margin-top: 14px; line-height: 1.5; }
 </style>
 </head>
 <body>
 <header>
   <div class="title-row">
-    <h1>Etsy Niche Research</h1>
-    <span class="badge">★ Top listings + real tags</span>
+    <h1>Etsy POD Research</h1>
+    <span class="badge">★ niches · rule book · AI</span>
   </div>
-  <p class="sub">Type a niche (e.g. <code>Retirement tshirts</code>) and we pull Etsy's top listings and their seller tags into your database. Click a saved niche to view its listings.</p>
-  <div class="niche-bar">
-    <input type="text" id="nicheInput" placeholder="Add a niche to research…" autocomplete="off" />
-    <button class="btn" id="addNiche">Research niche</button>
-  </div>
-  <div class="controls">
-    <input type="search" id="q" placeholder="Search titles and tags…" autocomplete="off" />
-    <select id="sort">
-      <option value="rank">Sort: Default order</option>
-      <option value="tags-desc">Most tags first</option>
-      <option value="tags-asc">Fewest tags first</option>
-      <option value="title">Title A–Z</option>
-    </select>
-    <span class="count" id="count"></span>
-  </div>
+  <nav class="tabs">
+    <button class="tab active" data-tab="niches">Niches</button>
+    <button class="tab" data-tab="rulebook">Rule Book</button>
+    <button class="tab" data-tab="settings">Settings</button>
+  </nav>
 </header>
-<div class="niches" id="niches"></div>
-<div class="offline-banner" id="offlineBanner" hidden>
-  Running without a backend — showing a local sample. Deploy on Vercel with the database connected to add and save niches.
-</div>
-<main>
-  <div class="grid" id="grid"></div>
-  <div class="empty" id="empty" hidden>No listings match your search.</div>
-</main>
+
+<!-- ===== NICHES VIEW ===== -->
+<section class="view" id="view-niches">
+  <div class="viewbar">
+    <p class="sub">Type a niche (e.g. <code>Retirement tshirts</code>) and we pull Etsy's top listings and their seller tags into your database. Click a saved niche to view its listings.</p>
+    <div class="niche-bar">
+      <input type="text" id="nicheInput" placeholder="Add a niche to research…" autocomplete="off" />
+      <button class="btn" id="addNiche">Research niche</button>
+    </div>
+    <div class="controls">
+      <input type="search" id="q" placeholder="Search titles and tags…" autocomplete="off" />
+      <select id="sort">
+        <option value="rank">Sort: Default order</option>
+        <option value="tags-desc">Most tags first</option>
+        <option value="tags-asc">Fewest tags first</option>
+        <option value="title">Title A–Z</option>
+      </select>
+      <span class="count" id="count"></span>
+    </div>
+    <div class="niches" id="niches" style="padding:0;margin-top:12px"></div>
+    <div class="offline-banner" id="offlineBanner" hidden style="margin-top:12px">
+      Running without a backend — showing a local sample. Deploy on Vercel with the database connected to add and save niches.
+    </div>
+  </div>
+  <main>
+    <div class="grid" id="grid"></div>
+    <div class="empty" id="empty" hidden>No listings match your search.</div>
+  </main>
+</section>
+
+<!-- ===== RULE BOOK VIEW ===== -->
+<section class="view" id="view-rulebook" hidden>
+  <div class="viewbar">
+    <p class="sub">Your POD design playbook — the reference used to tag listing designs by type, pattern, element, phrase, typography and colour.</p>
+    <div class="controls">
+      <input type="search" id="rbSearch" placeholder="Search the rule book…" autocomplete="off" />
+      <span class="count" id="rbCount"></span>
+    </div>
+    <div class="rb-dims" id="rbDims"></div>
+  </div>
+  <main>
+    <div id="rbContent"></div>
+    <div class="empty" id="rbEmpty" hidden>No rule-book data yet. Run the ingestion script to load it.</div>
+  </main>
+</section>
+
+<!-- ===== SETTINGS VIEW ===== -->
+<section class="view" id="view-settings" hidden>
+  <main>
+    <div class="settings-card">
+      <h2>AI Configuration</h2>
+      <p class="hint">Add an AI provider key here. Future AI modules (tag suggestions, niche-gap analysis, title/description drafting) read this configuration server-side.</p>
+      <div class="key-status unset" id="keyStatus">No AI key saved yet.</div>
+      <div class="field">
+        <label for="aiProvider">Provider</label>
+        <select id="aiProvider">
+          <option value="gemini">Google Gemini</option>
+          <option value="openai">OpenAI</option>
+          <option value="anthropic">Anthropic (Claude)</option>
+          <option value="groq">Groq</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="aiModel">Model (optional)</label>
+        <input type="text" id="aiModel" placeholder="e.g. gemini-2.5-flash" autocomplete="off" />
+        <div class="sub-note">Leave blank to let each module pick a sensible default.</div>
+      </div>
+      <div class="field">
+        <label for="aiKey">API key</label>
+        <input type="password" id="aiKey" placeholder="Paste your AI API key…" autocomplete="off" />
+        <div class="sub-note">The key is stored server-side and never shown again — only a masked preview.</div>
+      </div>
+      <button class="btn" id="saveSettings">Save configuration</button>
+      <p class="security-note">Security: the key is stored in your own private database and the server never returns it to the browser (only a masked preview). Anyone with write access to this app could use it to make AI calls, so treat this as a single-tenant tool. Rotate the key from your provider if needed.</p>
+    </div>
+  </main>
+</section>
+
 <footer>
-  <span id="total"></span> listings · Etsy niche research
+  <span id="total"></span> listings · Etsy POD research
 </footer>
 <div class="toast" id="toast"></div>
 
@@ -1385,6 +1508,160 @@ addBtn.addEventListener('click', addNiche);
 nicheInput.addEventListener('keydown', e => { if (e.key === 'Enter') addNiche(); });
 qEl.addEventListener('input', render);
 sortEl.addEventListener('change', render);
+
+// ======================= TABS =======================
+const views = { niches: document.getElementById('view-niches'), rulebook: document.getElementById('view-rulebook'), settings: document.getElementById('view-settings') };
+let rbLoaded = false, settingsLoaded = false;
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === name));
+  Object.entries(views).forEach(([k, el]) => { el.hidden = k !== name; });
+  if (name === 'rulebook' && !rbLoaded) loadRulebook();
+  if (name === 'settings' && !settingsLoaded) loadSettings();
+}
+document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => switchTab(t.dataset.tab)));
+
+// ======================= RULE BOOK =======================
+const rbDimsEl = document.getElementById('rbDims');
+const rbContentEl = document.getElementById('rbContent');
+const rbSearchEl = document.getElementById('rbSearch');
+const rbCountEl = document.getElementById('rbCount');
+const rbEmptyEl = document.getElementById('rbEmpty');
+let rbCategories = [];
+let rbActiveDim = 'all';
+
+const DIM_LABELS = {
+  all: 'All', design_style: 'Design Styles', aesthetic: 'Aesthetics', phrase: 'Phrases',
+  value_add: 'Value Adds', cross_niche: 'Cross-Niche', color: 'Colors', font: 'Typography', guide: 'Guide'
+};
+
+async function loadRulebook() {
+  rbLoaded = true;
+  rbContentEl.innerHTML = '<p class="rb-desc" style="padding:0 24px">Loading rule book…</p>';
+  try {
+    const data = await api('/api/rulebook');
+    rbCategories = data.categories || [];
+  } catch (e) {
+    rbCategories = [];
+    rbContentEl.innerHTML = '<p class="rb-desc" style="padding:0 24px">Could not load rule book: ' + esc(e.message) + '</p>';
+    return;
+  }
+  renderRbDims();
+  renderRulebook();
+}
+
+function renderRbDims() {
+  const dims = ['all', ...Array.from(new Set(rbCategories.map(c => c.dimension)))];
+  rbDimsEl.innerHTML = dims.map(d =>
+    `<span class="rb-dim${d === rbActiveDim ? ' active' : ''}" data-dim="${esc(d)}">${esc(DIM_LABELS[d] || d)}</span>`
+  ).join('');
+}
+
+function renderRulebook() {
+  const q = rbSearchEl.value.trim().toLowerCase();
+  let cats = rbCategories;
+  if (rbActiveDim !== 'all') cats = cats.filter(c => c.dimension === rbActiveDim);
+
+  let shownEntries = 0;
+  const html = cats.map(cat => {
+    let entries = cat.entries;
+    if (q) entries = entries.filter(e =>
+      (e.label || '').toLowerCase().includes(q) ||
+      (e.note || '').toLowerCase().includes(q) ||
+      (e.grouping || '').toLowerCase().includes(q)
+    );
+    if (!entries.length) return '';
+    shownEntries += entries.length;
+
+    // Group entries by their grouping label, preserving order.
+    const groups = new Map();
+    for (const e of entries) {
+      const g = e.grouping || '';
+      if (!groups.has(g)) groups.set(g, []);
+      groups.get(g).push(e);
+    }
+    const groupsHtml = Array.from(groups.entries()).map(([g, items]) => `
+      ${g ? `<div class="rb-group-label">${esc(g)}</div>` : ''}
+      <div class="rb-items">
+        ${items.map(e => `
+          <div class="rb-item">
+            <span class="lbl${cat.dimension === 'phrase' ? ' rb-phrase' : ''}">${highlight(e.label, q)}</span>
+            ${e.note ? `<span class="nt">${/^https?:\/\//.test(e.note) ? `<a href="${esc(e.note)}" target="_blank" rel="noopener">${esc(e.note)}</a>` : highlight(e.note, q)}</span>` : ''}
+          </div>`).join('')}
+      </div>`).join('');
+
+    return `
+      <div class="rb-section">
+        <h2>${esc(cat.name)} <span class="rb-pill">${esc(DIM_LABELS[cat.dimension] || cat.dimension)}</span> <span class="rb-pill" style="background:transparent;color:var(--muted)">${entries.length}</span></h2>
+        ${cat.description ? `<p class="rb-desc">${esc(cat.description)}</p>` : ''}
+        ${groupsHtml}
+      </div>`;
+  }).join('');
+
+  rbContentEl.innerHTML = html;
+  rbEmptyEl.hidden = shownEntries > 0 || rbCategories.length === 0;
+  if (rbCategories.length === 0) rbEmptyEl.hidden = false;
+  const total = rbCategories.reduce((n, c) => n + c.entries.length, 0);
+  rbCountEl.textContent = q || rbActiveDim !== 'all' ? shownEntries + ' of ' + total + ' shown' : total + ' entries';
+}
+
+rbDimsEl.addEventListener('click', e => {
+  const d = e.target.closest('.rb-dim');
+  if (!d) return;
+  rbActiveDim = d.dataset.dim;
+  renderRbDims();
+  renderRulebook();
+});
+rbSearchEl.addEventListener('input', renderRulebook);
+
+// ======================= SETTINGS =======================
+const aiProviderEl = document.getElementById('aiProvider');
+const aiModelEl = document.getElementById('aiModel');
+const aiKeyEl = document.getElementById('aiKey');
+const saveSettingsBtn = document.getElementById('saveSettings');
+const keyStatusEl = document.getElementById('keyStatus');
+
+function paintKeyStatus(data) {
+  if (data.ai_key_set) {
+    keyStatusEl.className = 'key-status set';
+    keyStatusEl.textContent = 'AI key saved (' + (data.ai_key_preview || '••••') + ') · provider: ' + (data.ai_provider || '—');
+  } else {
+    keyStatusEl.className = 'key-status unset';
+    keyStatusEl.textContent = 'No AI key saved yet.';
+  }
+}
+
+async function loadSettings() {
+  settingsLoaded = true;
+  try {
+    const data = await api('/api/settings');
+    if (data.ai_provider) aiProviderEl.value = data.ai_provider;
+    if (data.ai_model) aiModelEl.value = data.ai_model;
+    paintKeyStatus(data);
+  } catch (e) {
+    keyStatusEl.className = 'key-status unset';
+    keyStatusEl.textContent = 'Settings unavailable: ' + e.message;
+  }
+}
+
+async function saveSettings() {
+  saveSettingsBtn.disabled = true;
+  const original = saveSettingsBtn.textContent;
+  saveSettingsBtn.innerHTML = '<span class="spinner"></span>Saving…';
+  try {
+    const body = { ai_provider: aiProviderEl.value, ai_model: aiModelEl.value };
+    if (aiKeyEl.value.trim()) body.ai_api_key = aiKeyEl.value.trim();
+    const data = await api('/api/settings', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+    aiKeyEl.value = '';
+    paintKeyStatus(data);
+    toast('Configuration saved.');
+  } catch (e) {
+    toast('Save failed: ' + esc(e.message), true);
+  } finally {
+    saveSettingsBtn.disabled = false;
+    saveSettingsBtn.textContent = original;
+  }
+}
+saveSettingsBtn.addEventListener('click', saveSettings);
 
 loadNiches();
 </script>

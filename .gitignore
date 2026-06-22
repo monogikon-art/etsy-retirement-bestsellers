@@ -4,3 +4,4 @@ node_modules/
 .env.*
 *.local
 etsy_api_key.txt
+.env*
